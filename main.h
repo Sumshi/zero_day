@@ -11,12 +11,14 @@
 #include <signal.h>
 #include <fcntl.h>
 #include<stdbool.h>
+#include <stdarg.h>
 #define BUFFER_SIZE 1024
 #define MAX_ARGS 100
 
 extern char **environ;
 
 int clear();
+void printPrompt();
 void parseInput(char *buffer, char **args);
 char *getAbsolutePath(char *command);
 void executeCommand(char *cmd, char **args);
@@ -35,4 +37,5 @@ char *_strdup(char *strtodup);
 size_t _strcspn(const char *str1, const char *str2);
 int _strncmp(const char *str1, const char *str2, size_t n);
 int _atoi(char *str);
+int _snprintf(char *str, size_t size, const char *format, ...);
 #endif
