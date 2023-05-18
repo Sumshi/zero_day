@@ -1,5 +1,4 @@
 #include "main.h"
-#include "main.h"
 /**
  * executeCommand - executes a command
  * @cmd: command to execute
@@ -8,23 +7,24 @@
  */
 void executeCommand(char *cmd, char **args)
 {
+	int last_exit_status = 0;
 	pid_t pid;
 	int status;
 
 	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork error");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
+	if (pid == 0)
 	{
 		execve(cmd, args, NULL);
-		perror("execve error");
+		perror("execve");
 		exit(EXIT_FAILURE);
+	}
+	else if (pid < 0)
+	{
+		perror("fork");
 	}
 	else
 	{
 		waitpid(pid, &status, 0);
+		last_exit_status = WEXITSTATUS(status);
 	}
 }

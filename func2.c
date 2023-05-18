@@ -93,3 +93,19 @@ int _snprintf(char *str, size_t size, const char *format, ...)
 
 	return (ret);
 }
+/**
+ * _sprintf - writes formatted output to a string
+ * @str: pointer to destination buffer
+ * @format: format string
+ * Return: number of characters that would have been written.
+ */
+int _sprintf(char *str, const char *format, ...)
+{
+	va_list args;
+	int result;
+
+	va_start(args, format);
+	result = vsprintf(str, format, args);
+	va_end(args);
+	return (result);
+}
