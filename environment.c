@@ -10,7 +10,7 @@ void printEnv(void)
 
 	for (env = environ; *env != NULL; env++)
 	{
-		len = strlen(*env);
+		len = _strlen(*env);
 		write(STDOUT_FILENO, *env, len);
 		write(STDOUT_FILENO, "\n", 1);
 	}

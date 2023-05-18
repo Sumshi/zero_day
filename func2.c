@@ -54,24 +54,42 @@ int _strncmp(const char *str1, const char *str2, size_t n)
  */
 int _atoi(char *str)
 {
-        int result = 0;
-        int sign = 1;
-        int i = 0;
-        /*Handle negative numbers*/
-        if (str[0] == '-')
-        {
-                sign = -1;
-                i++;
-        }
-        /*Iterate through string and convert to integer*/
-        for (; str[i] != '\0'; i++)
-        {
-                if (str[i] < '0' || str[i] > '9')
-                {
-                        break;
-                }
-                result = result * 10 + (str[i] - '0');
-        }
+	int result = 0;
+	int sign = 1;
+	int i = 0;
+	/*Handle negative numbers*/
+	if (str[0] == '-')
+	{
+		sign = -1;
+		i++;
+	}
+	/*Iterate through string and convert to integer*/
+	for (; str[i] != '\0'; i++)
+	{
+		if (str[i] < '0' || str[i] > '9')
+		{
+			break;
+		}
+		result = result * 10 + (str[i] - '0');
+	}
 
-        return (sign * result);
+	return (sign * result);
+}
+/**
+ * _snprintf - writes formatted output to a string
+ * @str: pointer to destination buffer
+ * @size: maximum number of bytes to be used in the buffer
+ * @format: format string
+ * Return: number of characters that would have been written.
+ */
+int _snprintf(char *str, size_t size, const char *format, ...)
+{
+	va_list args;
+	int ret;
+
+	va_start(args, format);
+	ret = vsnprintf(str, size, format, args);
+	va_end(args);
+
+	return (ret);
 }

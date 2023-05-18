@@ -33,7 +33,7 @@ char *getAbsolutePath(char *command)
 	pathDirectory[numDirectory] = NULL;
 	for (i = 0; i < numDirectory; i++)
 	{
-		snprintf(tempCmd, BUFFER_SIZE, "%s/%s", pathDirectory[i], command);
+		_snprintf(tempCmd, BUFFER_SIZE, "%s/%s", pathDirectory[i], command);
 		if (access(tempCmd, X_OK) == 0)
 		{
 			return (_strdup(tempCmd));
