@@ -25,6 +25,10 @@ void printEnv();
 int changeDirectory(char *directory);
 int mySetEnv(char *var, char *value);
 int myUnsetEnv(char *var);
+
+int handleAnd(char *input);
+int handleOr(char *input);
+/*functions used prototypes*/
 char **tokenize(char *str, char *delimiter);
 unsigned int _strlen(char *str);
 char *_strcpy(char *dest, char *src);

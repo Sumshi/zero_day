@@ -1,7 +1,7 @@
 #include "main.h"
 /**
  * changeDirectory - changes a directory
- * @directory: directory to change from or to
+ * @directory: directory to change to
  * Return: retur 0
  */
 int changeDirectory(char *directory)
@@ -17,7 +17,7 @@ int changeDirectory(char *directory)
 	if (_strcmpr(directory, "-") == 0)
 	{
 		directory = getenv("OLDPWD");
-		msg = "Changing to previous directory: ";
+		msg = "previous directory: ";
 		write(STDOUT_FILENO, msg, _strlen(msg));
 		write(STDOUT_FILENO, directory, _strlen(directory));
 		write(STDOUT_FILENO, "\n", 1);
@@ -33,6 +33,6 @@ int changeDirectory(char *directory)
 
 	setenv("OLDPWD", cwd, 1);/*Set OLDPWD environment variable*/
 	setenv("PWD", newCwd, 1);/*Set PWD environment variable*/
-
+/*PWD - print name of current/working directory*/
 	return (0);
 }

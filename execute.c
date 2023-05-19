@@ -11,8 +11,8 @@ void executeCommand(char *cmd, char **args)
 	pid_t pid;
 	int status;
 
-	pid = fork();
-	if (pid == 0)
+	pid = fork();/*creates a process*/
+	if (pid == 0)/*child process*/
 	{
 		execve(cmd, args, NULL);
 		perror("execve");
@@ -22,7 +22,7 @@ void executeCommand(char *cmd, char **args)
 	{
 		perror("fork");
 	}
-	else
+	else/*parent process*/
 	{
 		waitpid(pid, &status, 0);
 		last_exit_status = WEXITSTATUS(status);

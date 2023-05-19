@@ -5,7 +5,7 @@
  * @args: arguments passes
  * Return: Always 0.
  */
-void parseInput(char *input, char **args)
+void parseInput(char *buffer, char **args)
 {
 	int last_exit_status = 0;
 	char *token;
@@ -13,7 +13,7 @@ void parseInput(char *input, char **args)
 	int j;
 	char pid[10];
 	char exit_status[10];
-	token = _strtok(input, " ");
+	token = _strtok(buffer, " ");
 	while (token != NULL)
 	{
 		if (token[0] == '#')

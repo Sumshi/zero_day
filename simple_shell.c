@@ -12,6 +12,7 @@ int main()
 	int clear_requested = 0;
 	char *cmd;
 	char *msg;
+	int i;
 	char *args[MAX_ARGS + 1]; /* 1 for null terminator */
 	while (1)
 	{
