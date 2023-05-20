@@ -15,7 +15,7 @@
 #define BUFFER_SIZE 1024
 #define MAX_ARGS 100
 extern char **environ;
-
+/*main program functions*/
 int clear();
 void printPrompt();
 void parseInput(char *buffer, char **args);
@@ -26,8 +26,6 @@ int changeDirectory(char *directory);
 int mySetEnv(char *var, char *value);
 int myUnsetEnv(char *var);
 
-int handleAnd(char *input);
-int handleOr(char *input);
 /*functions used prototypes*/
 char **tokenize(char *str, char *delimiter);
 unsigned int _strlen(char *str);
@@ -42,4 +40,7 @@ int _strncmp(const char *str1, const char *str2, size_t n);
 int _atoi(char *str);
 int _snprintf(char *str, size_t size, const char *format, ...);
 int _sprintf(char *str, const char *format, ...);
+/*errors*/
+void ctrl_c(__attribute__((unused)) int x);
+void print_error(char *program_name, char *input, int error_num);
 #endif

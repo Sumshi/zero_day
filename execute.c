@@ -24,7 +24,7 @@ void executeCommand(char *cmd, char **args)
 	}
 	else/*parent process*/
 	{
-		waitpid(pid, &status, 0);
+		waitpid(pid, &status, 0);/*waits for the child*/
 		last_exit_status = WEXITSTATUS(status);
 	}
 }
