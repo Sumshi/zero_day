@@ -2,30 +2,27 @@
 /**
  * getAbsolutePath - gets the absolute path of a command
  * @command: command to execute
- * Return: Always 0.
+ * Return: Absolute path of the command if found, otherwise NULL.
  */
 char *getAbsolutePath(char *command)
 {
-
 	char *pathDirectory[MAX_ARGS + 2];
-	int numDirectory = 0;
-	int i;
-	char *token;
+	int numDirectory = 0, i;
+	char *token, *pathEnvVar;
 	char tempCmd[BUFFER_SIZE];
-	char *pathEnvVar;
 
 	if (command[0] == '/')
 	{
 		return (_strdup(command));
 	}
-	pathDirectory[numDirectory++] = "/bin";/*add /bin to search path*/
+	pathDirectory[numDirectory++] = "/bin"; /* add /bin to search path */
 	pathEnvVar = getenv("PATH");
 	token = _strtok(pathEnvVar, ":");
 	while (token != NULL)
 	{
 		pathDirectory[numDirectory++] = token;
 		if (numDirectory >= MAX_ARGS + 1)
-		{/*increase size check accordingly*/
+		{ /* increase size check accordingly */
 			break;
 		}
 		token = _strtok(NULL, ":");
@@ -33,7 +30,16 @@ char *getAbsolutePath(char *command)
 	pathDirectory[numDirectory] = NULL;
 	for (i = 0; i < numDirectory; i++)
 	{
-		_snprintf(tempCmd, BUFFER_SIZE, "%s/%s", pathDirectory[i], command);
+		int pathLen = _strlen(pathDirectory[i]);
+		int cmdLen = _strlen(command);
+
+		if (pathLen + cmdLen + 2 > BUFFER_SIZE)
+		{ /* Check if the combined length exceeds buffer size */
+			continue;
+		}
+		_strcpy(tempCmd, pathDirectory[i]);
+		tempCmd[pathLen] = '/';
+		_strcpy(tempCmd + pathLen + 1, command);
 		if (access(tempCmd, X_OK) == 0)
 		{
 			return (_strdup(tempCmd));

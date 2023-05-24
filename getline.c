@@ -1,52 +1,49 @@
 #include "main.h"
 /**
- * myGetLine - my getline function
- *
- * Return: Always 0.
+ * my_getline - getline implementation
+ * @data: data to be read
+ * Return: characters read
  */
-char *myGetLine()
+ssize_t my_getline(main_t *data)
 {
-	static char buffer[BUFFER_SIZE];
-	static int pos;
-	static int bytesRead;
-	char *line = NULL;
-	int lineSize = 0;
-	char c;
+	char *cursor_ptr, *end_ptr, c;
+	size_t size = BUFFER_SIZE, read_line, length, new_size;
 
-	while (1)
+	data->line = malloc(size * sizeof(char));
+	if (data->line == NULL)
 	{
-		if (pos == bytesRead)
+		return (FAIL);
+	}
+	if (isatty(STDIN_FILENO))
+	{
+		PRINT(PROMPT);
+	}
+	for (cursor_ptr = data->line, end_ptr = data->line + size;;)
+	{
+		read_line = read(STDIN_FILENO, &c, 1);
+		if (read_line == 0)
 		{
-			bytesRead = read(STDIN_FILENO, buffer, BUFFER_SIZE);
-			if (bytesRead == -1)
-			{
-				perror("Error from read");
-				exit(EXIT_FAILURE);
-			}
-			if (bytesRead == 0)
-			{/*End of input*/
-				break;
-			}
-			pos = 0;/*Reset position to start of buffer*/
+			return (FAIL);
 		}
-		c = buffer[pos++];
+		*cursor_ptr++ = c;
 		if (c == '\n')
 		{
-			line[lineSize] = '\0';
-			break;
+			*cursor_ptr = '\0';
+			return (SUCCESS);
 		}
-		line = realloc(line, ++lineSize);/*Expand line buffer as needed*/
-		line[lineSize - 1] = c;
+		if (cursor_ptr + 2 >= end_ptr)
+		{
+			new_size = size * 2;
+			length = cursor_ptr - data->line;
+			data->line = my_realloc(data->line, size * sizeof(char),
+					new_size * sizeof(char));
+			if (data->line == NULL)
+			{
+				return (FAIL);
+			}
+			size = new_size;
+			end_ptr = data->line + size;
+			cursor_ptr = data->line + length;
+		}
 	}
-	return (line);
 }
-/*int main(void) {
-  char *line;
-
-  while ((line = myGetLine()) != NULL) {
-  printf("%s\n", line);
-  free(line);
-  }
-
-  return 0;
-  }*/

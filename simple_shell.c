@@ -1,53 +1,58 @@
 #include "main.h"
 /**
  * main - check the code
- *
  * Return: Always 0.
  */
-int main(void)
+int main()
 {
 	char buffer[BUFFER_SIZE];
-	ssize_t length;/*stores length of user input*/
-	int status;/*stores status of a process*/
-	int clear_requested = 0;/*indicates if a clear screen is reguested*/
-	char *cmd;/*stores commands to be executed*/
-	char *msg;/*stores error messages*/
-	int i;
-	/*args stores arguments passed to the shell*/
+	ssize_t length;
+	int clear_requested = 0;
+	char *cmd, *msg;
 	char *args[MAX_ARGS + 1]; /* 1 for null terminator */
-	while (1)/*infinite loop*/
+	while (1)
 	{
 		if (clear_requested)
 		{
 			clear();
-			clear_requested = 0;/*resets the flag to 0 everytime*/
+			clear_requested = 0;
 		}
-		printPrompt();/*displays a prompt*/
-		length = read(STDIN_FILENO, buffer, BUFFER_SIZE);/*stores number of characters read*/
+		printPrompt();
+		length = read(STDIN_FILENO, buffer, BUFFER_SIZE);
 		if (length == -1)
 		{
 			perror("Error from read");
 			exit(EXIT_FAILURE);
 		}
-		if (length == 0)/*checks if end of file has been reached*/
+		if (length == 0)
 		{
-			break;/*end of file*/
+			exit(0);
 		}
 		if (buffer[length - 1] == '\n')
 		{/*REMOVES NEW LINE*/
 			buffer[length - 1] = '\0';
 		}
-		parseInput(buffer, args);/*tokenizes the commands passed*/
-		if (_strcmpr(args[0], "exit") == 0)
-		{/*Handle exit command*/
-			status = EXIT_SUCCESS;
-			if (args[1] != NULL)
-			{/*If argument is provided*/
-				status = _atoi(args[1]);/*Convert to integer*/
-			}
-			exit(status);/*Exit the shell with given status*/
+		if (buffer[0] == '\033')
+		{
+			perror("./hsh: No such file or directory\n");
 		}
-		else if (_strcmpr(args[0], "env") == 0)
+		if (isComment(buffer))
+		{
+			continue;
+		}
+		parseInput(buffer, args);
+		if (_strcmpr(args[0], "exit") == 0)
+		{	
+			int exitStatus = 0;
+
+			if (args[1] != NULL)
+			{
+				exitStatus = _atoi(args[1]);
+			}
+			exitShell(exitStatus);
+			break;
+		}
+		if (_strcmpr(args[0], "env") == 0)
 		{/*Handle env command*/
 			printEnv();
 			continue;
@@ -61,29 +66,19 @@ int main(void)
 		}
 		else if (_strcmpr(args[0], "setenv") == 0)
 		{/*Handle setenv command*/
-			if (args[1] == NULL || args[2] == NULL)
+			if (args[1] != NULL && args[2] != NULL)
 			{
-				msg = "Usage: setenv VARIABLE VALUE\n";
-				write(STDOUT_FILENO, msg, _strlen(msg));
-				continue;
+				mySetEnv(args[1], args[2]);
 			}
-			if (mySetEnv(args[1], args[2]) != 0)
-			{
-				continue;
-			}
+			continue;
 		}
 		else if (_strcmpr(args[0], "unsetenv") == 0)
 		{/*Handle unsetenv command*/
-			if (args[1] == NULL)
+			if (args[1] != NULL)
 			{
-				msg = "Usage: unsetenv VARIABLE\n";
-				write(STDOUT_FILENO, msg, _strlen(msg));
-				continue;
+				myUnsetEnv(args[1]);
 			}
-			if (myUnsetEnv(args[1]) != 0)
-			{
-				continue;
-			}
+			continue;
 		}
 		else if (_strcmpr(args[0], "clear") == 0)
 		{

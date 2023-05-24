@@ -76,36 +76,38 @@ int _atoi(char *str)
 	return (sign * result);
 }
 /**
- * _snprintf - writes formatted output to a string
- * @str: pointer to destination buffer
- * @size: maximum number of bytes to be used in the buffer
- * @format: format string
- * Return: number of characters that would have been written.
+ * write_string - writes a string to a buffer
+ * @dest: destination buffer
+ * @src: source string
+ * @len: length of the string
  */
-int _snprintf(char *str, size_t size, const char *format, ...)
+void write_string(char *dest, char *src, int len)
 {
-	va_list args;
-	int ret;
+	int i;
 
-	va_start(args, format);
-	ret = vsnprintf(str, size, format, args);
-	va_end(args);
-
-	return (ret);
+	for (i = 0; i < len; i++)
+	{
+		dest[i] = src[i];
+	}
+	dest[i] = '\0';
 }
 /**
- * _sprintf - writes formatted output to a string
- * @str: pointer to destination buffer
- * @format: format string
- * Return: number of characters that would have been written.
+ * reverse_string - reverses a string
+ * @str: the string to reverse
+ * @length: the length of the string
  */
-int _sprintf(char *str, const char *format, ...)
+void reverse_string(char *str, int length)
 {
-	va_list args;
-	int result;
+	int start = 0;
+	int end = length - 1;
+	char temp;
 
-	va_start(args, format);
-	result = vsprintf(str, format, args);
-	va_end(args);
-	return (result);
+	while (start < end)
+	{
+		temp = str[start];
+		str[start] = str[end];
+		str[end] = temp;
+		start++;
+		end--;
+	}
 }
